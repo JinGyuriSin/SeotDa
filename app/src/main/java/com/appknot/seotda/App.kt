@@ -1,6 +1,6 @@
-package com.example.seotda
+package com.appknot.seotda
 
-import com.example.seotda.di.DaggerAppComponent
+import com.appknot.seotda.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 

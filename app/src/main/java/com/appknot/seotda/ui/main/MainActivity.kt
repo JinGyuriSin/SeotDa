@@ -1,8 +1,8 @@
-package com.example.seotda.ui.main
+package com.appknot.seotda.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.seotda.R
+import com.appknot.seotda.R
 
 class MainActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.example.seotda.di.ui
+package com.appknot.seotda.di
 
 import dagger.Module
 
@@ -8,5 +8,5 @@ import dagger.Module
  */
 
 @Module
-class MainModule {
+class ApiModule {
 }

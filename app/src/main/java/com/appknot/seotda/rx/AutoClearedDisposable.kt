@@ -1,4 +1,4 @@
-package com.example.seotda.rx
+package com.appknot.seotda.rx
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle

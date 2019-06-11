@@ -1,4 +1,4 @@
-package com.example.seotda.extensions
+package com.appknot.seotda.extensions
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver

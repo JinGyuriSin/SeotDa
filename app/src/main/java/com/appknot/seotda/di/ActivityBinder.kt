@@ -1,7 +1,7 @@
-package com.example.seotda.di
+package com.appknot.seotda.di
 
-import com.example.seotda.di.ui.MainModule
-import com.example.seotda.ui.main.MainActivity
+import com.appknot.seotda.di.ui.MainModule
+import com.appknot.seotda.ui.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

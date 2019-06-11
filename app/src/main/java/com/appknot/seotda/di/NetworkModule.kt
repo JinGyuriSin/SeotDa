@@ -1,4 +1,4 @@
-package com.example.seotda.di
+package com.appknot.seotda.di
 
 import dagger.Module
 import dagger.Provides

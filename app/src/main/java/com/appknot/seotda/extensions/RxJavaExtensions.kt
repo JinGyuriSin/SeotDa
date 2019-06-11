@@ -1,6 +1,6 @@
-package com.example.seotda.extensions
+package com.appknot.seotda.extensions
 
-import com.example.seotda.rx.AutoClearedDisposable
+import com.appknot.seotda.rx.AutoClearedDisposable
 import io.reactivex.Completable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

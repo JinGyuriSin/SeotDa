@@ -1,7 +1,7 @@
-package com.example.seotda.di
+package com.appknot.seotda.di
 
 import android.app.Application
-import com.example.seotda.App
+import com.appknot.seotda.App
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
