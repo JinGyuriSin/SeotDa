@@ -25,7 +25,7 @@ class App : DaggerApplication() {
 
         var isTestServer = false
         // API Host - 운영 서버
-        const val API_HOST = "http://ethan.appknot.com"
+        const val API_HOST = "http://ethan.appknot.com/SeotDa/g1/api/"
         // API Host - 개발 서버
         const val API_HOST_TEST = ""
     }
