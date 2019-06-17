@@ -6,4 +6,6 @@
     <color name="colorSecondary">#03DAC6</color>
     <color name="colorSecondaryVariant">#018786</color>
     <color name="colorOnSecondary">#000000</color>
+    <color name="colorMainTheme">#0B6138</color>
+    <color name="colorRed">#ff0000</color>
 </resources>

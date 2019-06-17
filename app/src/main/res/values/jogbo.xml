@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="jogboarray">
+        <item>38광땡</item>
+        <item>광땡</item>
+        <item>장땡</item>
+        <item>9땡</item>
+        <item>8땡</item>
+        <item>7땡</item>
+        <item>6땡</item>
+        <item>5땡</item>
+        <item>4땡</item>
+        <item>3땡</item>
+        <item>2땡</item>
+        <item>1땡</item>
+        <item>알리</item>
+        <item>독사</item>
+        <item>구삥</item>
+        <item>장삥</item>
+        <item>장사</item>
+        <item>세륙</item>
+        <item>끗</item>
+    </string-array>
+
+</resources>
