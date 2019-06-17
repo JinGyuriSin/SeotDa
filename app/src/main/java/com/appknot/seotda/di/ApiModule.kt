@@ -3,7 +3,7 @@ package com.appknot.seotda.di
 import com.appknot.seotda.App
 import com.appknot.seotda.App.Companion.API_HOST
 import com.appknot.seotda.App.Companion.API_HOST_TEST
-import com.appknot.seotda.api.RetrofitAPI
+import com.appknot.seotda.api.ExampleApi
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -21,7 +21,6 @@ import javax.inject.Singleton
 
 @Module
 class ApiModule {
-
 
     var host = API_HOST
 
@@ -53,6 +52,6 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideExample(retrofit: Retrofit) =
-        retrofit.create(RetrofitAPI.Example::class.java)
+    fun provideExample(retrofit: Retrofit): ExampleApi =
+        retrofit.create(ExampleApi::class.java)
 }
