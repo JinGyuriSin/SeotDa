@@ -9,33 +9,23 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.appknot.seotda.R
 import com.appknot.seotda.api.ApiResponse
-import com.appknot.seotda.api.ExampleApi
-import com.appknot.seotda.extensions.api
 import com.google.android.material.snackbar.Snackbar
+import dagger.android.support.DaggerAppCompatActivity
 import retrofit2.Response
 import java.util.*
-import javax.inject.Inject
 
 /**
  *
  * @author Jin on 2019-06-12
  */
-open class BaseActivity : AppCompatActivity()    {
+open class BaseActivity : DaggerAppCompatActivity()    {
 
     protected lateinit var context: Context
     private var loadingDialogList: ArrayList<AlertDialog?> = ArrayList()
 
-    @Inject lateinit var exampleApi: ExampleApi
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this
-
-
-        //example
-        exampleApi.login("MAGIC_TOKEN").api(
-            context
-        )
     }
 
     fun showLoadingDialog() {

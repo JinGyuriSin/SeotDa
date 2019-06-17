@@ -9,11 +9,18 @@ import retrofit2.http.POST
  *
  * @author Jin on 2019-06-17
  */
-interface ExampleApi {
+interface UserApi {
 
     @FormUrlEncoded
-    @POST
-    fun login(
+    @POST("registerToken.php")
+    fun registerToken(
+        @Field("id") id: String,
         @Field("token") token: String
+    ): Single<ApiResponse>
+
+    @FormUrlEncoded
+    @POST("enterToRoom.php")
+    fun enterToRoom(
+        @Field("id") id: String
     ): Single<ApiResponse>
 }

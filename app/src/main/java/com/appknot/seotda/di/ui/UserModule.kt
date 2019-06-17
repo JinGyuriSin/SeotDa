@@ -1,8 +1,11 @@
 package com.appknot.seotda.di.ui
 
+import android.content.Context
+import com.appknot.seotda.api.UserApi
 import com.appknot.seotda.ui.user.UserViewModelFactory
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 
 /**
  *
@@ -13,5 +16,6 @@ import dagger.Provides
 class UserModule {
 
     @Provides
-    fun provideViewModelFactory(): UserViewModelFactory = UserViewModelFactory()
+    fun provideViewModelFactory(userApi: UserApi): UserViewModelFactory =
+        UserViewModelFactory(userApi)
 }

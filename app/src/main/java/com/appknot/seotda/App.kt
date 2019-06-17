@@ -17,6 +17,8 @@ class App : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+        app = this
     }
 
     fun logMessage(message: String) {

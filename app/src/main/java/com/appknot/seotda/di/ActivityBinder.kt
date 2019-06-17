@@ -3,7 +3,7 @@ package com.appknot.seotda.di
 import com.appknot.seotda.di.ui.MainModule
 import com.appknot.seotda.di.ui.UserModule
 import com.appknot.seotda.ui.main.MainActivity
-import com.appknot.seotda.ui.user.UserListActivity
+import com.appknot.seotda.ui.user.UserActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -18,5 +18,5 @@ abstract class ActivityBinder {
     abstract fun bindMainActivity(): MainActivity
 
     @ContributesAndroidInjector(modules = [UserModule::class])
-    abstract fun bindUserListactivity(): UserListActivity
+    abstract fun bindUserListactivity(): UserActivity
 }

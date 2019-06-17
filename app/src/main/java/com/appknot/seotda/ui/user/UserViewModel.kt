@@ -1,10 +1,33 @@
 package com.appknot.seotda.ui.user
 
-import androidx.lifecycle.ViewModel
+import com.appknot.seotda.api.UserApi
+import com.appknot.seotda.extensions.api
+import com.appknot.seotda.ui.BaseViewModel
+import io.reactivex.disposables.Disposable
 
 /**
  *
  * @author Jin on 2019-06-11
  */
-class UserViewModel : ViewModel() {
+class UserViewModel(val api: UserApi) : BaseViewModel() {
+
+    fun requestRegisterToken(id: String, fbToken: String): Disposable =
+            api.registerToken(id, fbToken).api()
+                .doOnSubscribe { isLoading.onNext(true) }
+                .doFinally { isLoading.onNext(false) }
+                .subscribe({
+                    requestEnterRoom(id)
+                })  {
+                    message.onNext(it.message.toString())
+                }
+
+    fun requestEnterRoom(id: String): Disposable =
+            api.enterToRoom(id).api()
+                .doOnSubscribe { isLoading.onNext(true) }
+                .doFinally { isLoading.onNext(false) }
+                .subscribe({
+
+                })  {
+                    message.onNext(it.message.toString())
+                }
 }
