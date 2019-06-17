@@ -15,6 +15,12 @@ class App : DaggerApplication() {
         return DaggerAppComponent.builder().application(this).build()
     }
 
+    override fun onCreate() {
+        super.onCreate()
+
+        app = this
+    }
+
     fun logMessage(message: String) {
         Log.d("@@ ${getString(R.string.app_name)}", message)
     }

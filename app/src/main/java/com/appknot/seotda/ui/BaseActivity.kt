@@ -3,16 +3,22 @@ package com.appknot.seotda.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.appknot.seotda.R
-import java.util.ArrayList
+import com.appknot.seotda.api.ApiResponse
+import com.google.android.material.snackbar.Snackbar
+import dagger.android.support.DaggerAppCompatActivity
+import retrofit2.Response
+import java.util.*
 
 /**
  *
  * @author Jin on 2019-06-12
  */
-open class BaseActivity : AppCompatActivity()    {
+open class BaseActivity : DaggerAppCompatActivity()    {
 
     protected lateinit var context: Context
     private var loadingDialogList: ArrayList<AlertDialog?> = ArrayList()
@@ -20,7 +26,6 @@ open class BaseActivity : AppCompatActivity()    {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = this
-
     }
 
     fun showLoadingDialog() {
@@ -36,8 +41,34 @@ open class BaseActivity : AppCompatActivity()    {
         )
     }
 
-    fun dismissLoadingDialog() {
+    fun hideLoadingDialog() {
         loadingDialogList.forEach { it?.dismiss() }
         loadingDialogList.clear()
+    }
+
+    fun showSnackbar(msg: String) {
+        Snackbar.make(window.decorView.findViewById(android.R.id.content),
+            msg,
+            Snackbar.LENGTH_LONG)
+            .setActionTextColor(getColor(R.color.colorSecondary))
+            .show()
+    }
+
+    fun showSnackbar(@StringRes StringResId: Int) {
+        showSnackbar(getString(StringResId))
+    }
+
+    fun showToast(msg: String, length: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(context, msg, length).show()
+    }
+
+    fun showToast(@StringRes StringResId: Int, length: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(context, getString(StringResId), length).show()
+    }
+
+    fun checkStatusCode(response: Response<ApiResponse>) {
+        if (response.code() != 200) {
+
+        }
     }
 }
