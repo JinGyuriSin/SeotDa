@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="jogboarray">
+    <string-array name="array_jogbo">
         <item>38광땡</item>
         <item>광땡</item>
         <item>장땡</item>
