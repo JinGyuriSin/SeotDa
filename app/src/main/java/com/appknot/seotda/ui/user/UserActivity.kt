@@ -7,15 +7,12 @@ import com.appknot.seotda.extensions.plusAssign
 import com.appknot.seotda.rx.AutoClearedDisposable
 import com.appknot.seotda.ui.BaseActivity
 import com.google.firebase.iid.FirebaseInstanceId
+import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.synthetic.main.activity_user.*
 import javax.inject.Inject
 
 class UserActivity : BaseActivity() {
-
-
-    internal val disposables = AutoClearedDisposable(this)
-
-    internal val viewDisposables = AutoClearedDisposable(lifecycleOwner = this, alwaysClearOnStop = false)
 
     @Inject lateinit var viewModelFactory: UserViewModelFactory
 
@@ -35,11 +32,6 @@ class UserActivity : BaseActivity() {
         var fbToken = ""
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             fbToken = it.token
-
-            var id = "Jin"
-
-            disposables += viewModel.requestRegisterToken(id, fbToken)
-//            disposables += viewModel.requestEnterRoom(id)
         }
 
         viewDisposables += viewModel.isLoading
@@ -54,5 +46,15 @@ class UserActivity : BaseActivity() {
             .subscribe { message -> showSnackbar(message) }
 
 
+        viewDisposables += btn_enter.clicks().subscribe {
+            val id = tiet_id.text.toString()
+
+            disposables += viewModel.requestRegisterToken(id, fbToken)
+        }
+
+        viewDisposables += viewModel.data
+            .filter { !it.isEmpty }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { startActivity(intent) }
     }
 }

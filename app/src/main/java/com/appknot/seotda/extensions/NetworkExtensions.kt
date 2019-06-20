@@ -1,18 +1,12 @@
 package com.appknot.seotda.extensions
 
 import android.content.Context
-import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.getColor
-import com.appknot.seotda.R
 import com.appknot.seotda.api.ApiResponse
 import com.appknot.seotda.api.ApiResponseException
-import com.appknot.seotda.ui.BaseActivity
-import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.ArrayList
 
 /**
  *
@@ -54,3 +48,8 @@ fun <T> Single<T>.withProgress(context: Context): Single<T> =
         .doFinally {
 //            (context as BaseActivity).hideLoadingDialog()
         }
+
+fun <T> parse(data: Any, modelType: Class<T>): T {
+    val jsonStr = Gson().toJson(data)
+    return Gson().fromJson(jsonStr, modelType)
+}
