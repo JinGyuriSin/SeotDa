@@ -8,7 +8,7 @@ package com.appknot.seotda.api
 class ApiResponse {
     lateinit var code: String
     lateinit var msg: Msg
-    lateinit var data: Any
+    var data: Any? = null
 
     inner class Msg {
         lateinit var ko: String

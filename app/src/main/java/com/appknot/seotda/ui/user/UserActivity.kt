@@ -1,11 +1,13 @@
 package com.appknot.seotda.ui.user
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
 import com.appknot.seotda.extensions.plusAssign
 import com.appknot.seotda.rx.AutoClearedDisposable
 import com.appknot.seotda.ui.BaseActivity
+import com.appknot.seotda.ui.main.MainActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,8 +55,7 @@ class UserActivity : BaseActivity() {
         }
 
         viewDisposables += viewModel.data
-            .filter { !it.isEmpty }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { startActivity(intent) }
+            .subscribe { startActivity(Intent(this, MainActivity::class.java)) }
     }
 }
