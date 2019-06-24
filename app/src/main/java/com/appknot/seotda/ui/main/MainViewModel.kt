@@ -1,5 +1,6 @@
 package com.appknot.seotda.ui.main
 
+import android.content.Context
 import com.appknot.seotda.api.UserApi
 import com.appknot.seotda.extensions.api
 import com.appknot.seotda.ui.BaseViewModel
@@ -10,16 +11,15 @@ import io.reactivex.disposables.Disposable
  *
  * @author Jin on 2019-06-21
  */
-class MainViewModel(val api: UserApi) : BaseViewModel() {
+class MainViewModel(val activity: MainActivity, val api: UserApi) : BaseViewModel() {
 
     fun requestExitRoom(id: String): Disposable =
-        api.leaveFromRoom(id).api()
+        api.leaveFromRoom(id).api(activity)
             .map { optionalOf(it.data) }
-            .doOnSubscribe { isLoading.onNext(false) }
-            .doFinally { isLoading.onNext(true) }
             .subscribe({
                 data.onNext(it)
+                activity.finish()
             }) {
-
+                message.onNext(it.message.toString())
             }
 }

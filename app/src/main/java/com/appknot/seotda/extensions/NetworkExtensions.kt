@@ -3,6 +3,7 @@ package com.appknot.seotda.extensions
 import android.content.Context
 import com.appknot.seotda.api.ApiResponse
 import com.appknot.seotda.api.ApiResponseException
+import com.appknot.seotda.ui.BaseActivity
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import io.reactivex.Single
@@ -20,7 +21,7 @@ import java.util.ArrayList
 
 val CODE_SUCCESS = "0"
 
-fun <T : Response<ApiResponse>> Single<T>.api(): Single<ApiResponse> =
+fun <T : Response<ApiResponse>> Single<T>.apiWithoutProgress(context: Context): Single<ApiResponse> =
     networkThread()
         .flatMap { response ->
             when (response.code()) {
@@ -36,20 +37,24 @@ fun <T : Response<ApiResponse>> Single<T>.api(): Single<ApiResponse> =
             }
         }
 
-fun <T> Single<T>.networkThread(): Single<T> {
-    return subscribeOn(Schedulers.io())
+
+fun <T : Response<ApiResponse>> Single<T>.api(context: Context): Single<ApiResponse> =
+    apiWithoutProgress(context)
+        .withProgress(context)
+
+fun <T> Single<T>.networkThread(): Single<T> =
+    subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-}
+
 
 fun <T> Single<T>.withProgress(context: Context): Single<T> =
-    networkThread()
-        .doOnSubscribe { disposable ->
+        doOnSubscribe { disposable ->
             AndroidSchedulers.mainThread().scheduleDirect {
-                //                showLoadingDialog(context)
+                (context as BaseActivity).showLoadingDialog()
             }
         }
         .doFinally {
-            //            (context as BaseActivity).hideLoadingDialog()
+            (context as BaseActivity).hideLoadingDialog()
         }
 
 /**

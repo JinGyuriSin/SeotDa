@@ -1,5 +1,6 @@
 package com.appknot.seotda.ui.user
 
+import android.content.Context
 import com.appknot.seotda.api.UserApi
 import com.appknot.seotda.extensions.api
 import com.appknot.seotda.ui.BaseViewModel
@@ -10,12 +11,10 @@ import io.reactivex.disposables.Disposable
  *
  * @author Jin on 2019-06-11
  */
-class UserViewModel(val api: UserApi) : BaseViewModel() {
+class UserViewModel(val context: Context, val api: UserApi) : BaseViewModel() {
 
     fun requestRegisterToken(id: String, fbToken: String): Disposable =
-            api.registerToken(id, fbToken).api()
-                .doOnSubscribe { isLoading.onNext(true) }
-                .doFinally { isLoading.onNext(false) }
+            api.registerToken(id, fbToken).api(context)
                 .subscribe({
                     requestEnterRoom(id)
                 })  {
@@ -23,10 +22,8 @@ class UserViewModel(val api: UserApi) : BaseViewModel() {
                 }
 
     fun requestEnterRoom(id: String): Disposable =
-            api.enterToRoom(id).api()
+            api.enterToRoom(id).api(context)
                 .map { optionalOf(it.data) }
-                .doOnSubscribe { isLoading.onNext(true) }
-                .doFinally { isLoading.onNext(false) }
                 .subscribe({
                     data.onNext(it)
                 })  {

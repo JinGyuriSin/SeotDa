@@ -43,13 +43,6 @@ class UserActivity : BaseActivity() {
 
         tiet_id.setText(idProvider.id)
 
-        viewDisposables += viewModel.isLoading
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { isLoading ->
-                if (isLoading) showLoadingDialog()
-                else hideLoadingDialog()
-            }
-
         viewDisposables += viewModel.message
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { message -> showSnackbar(message) }

@@ -36,6 +36,9 @@ class MainActivity : BaseActivity() {
         lifecycle += disposables
         lifecycle += viewDisposables
 
+        viewDisposables += viewModel.message
+            .subscribe { message -> showSnackbar(message) }
+        
         viewDisposables += btn_run.clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

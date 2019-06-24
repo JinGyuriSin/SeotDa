@@ -10,10 +10,10 @@ import com.appknot.seotda.api.UserApi
  * @author Jin on 2019-06-11
  */
 
-class UserViewModelFactory(val api: UserApi) : ViewModelProvider.Factory {
+class UserViewModelFactory(val context: Context, val api: UserApi) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return UserViewModel(api) as T
+        return UserViewModel(context, api) as T
     }
 }
