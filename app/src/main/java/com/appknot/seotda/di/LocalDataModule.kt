@@ -1,6 +1,11 @@
 package com.appknot.seotda.di
 
+import android.content.Context
+import com.appknot.seotda.model.IDProvider
 import dagger.Module
+import dagger.Provides
+import javax.inject.Named
+import javax.inject.Singleton
 
 /**
  *
@@ -11,4 +16,9 @@ import dagger.Module
 class LocalDataModule {
 
     // SharedPreferences
+
+    @Provides
+    @Singleton
+    fun provideIDProvider(@Named("appContext") context: Context): IDProvider = IDProvider(context)
+    
 }
