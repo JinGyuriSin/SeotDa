@@ -1,18 +1,21 @@
 package com.appknot.seotda.extensions
 
+import android.app.Activity
 import android.content.Context
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getColor
+import com.appknot.seotda.R
 import com.appknot.seotda.api.ApiResponse
 import com.appknot.seotda.api.ApiResponseException
-import com.appknot.seotda.ui.BaseActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Response
-import java.util.ArrayList
+import java.util.*
 
 /**
  *
@@ -21,7 +24,8 @@ import java.util.ArrayList
 
 val CODE_SUCCESS = "0"
 
-fun <T : Response<ApiResponse>> Single<T>.apiWithoutProgress(context: Context): Single<ApiResponse> =
+
+fun <T : Response<ApiResponse>> Single<T>.api(): Single<ApiResponse> =
     networkThread()
         .flatMap { response ->
             when (response.code()) {
@@ -37,25 +41,10 @@ fun <T : Response<ApiResponse>> Single<T>.apiWithoutProgress(context: Context): 
             }
         }
 
-
-fun <T : Response<ApiResponse>> Single<T>.api(context: Context): Single<ApiResponse> =
-    apiWithoutProgress(context)
-        .withProgress(context)
-
 fun <T> Single<T>.networkThread(): Single<T> =
     subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
 
-
-fun <T> Single<T>.withProgress(context: Context): Single<T> =
-        doOnSubscribe { disposable ->
-            AndroidSchedulers.mainThread().scheduleDirect {
-                (context as BaseActivity).showLoadingDialog()
-            }
-        }
-        .doFinally {
-            (context as BaseActivity).hideLoadingDialog()
-        }
 
 /**
  * JSON 정보 담고 있는 맵을 자바 객체로 변환

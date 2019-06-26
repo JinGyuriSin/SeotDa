@@ -1,7 +1,7 @@
 package com.appknot.seotda.di
 
 import android.content.Context
-import com.appknot.seotda.model.IDProvider
+import com.appknot.seotda.model.UserProvider
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -19,6 +19,6 @@ class LocalDataModule {
 
     @Provides
     @Singleton
-    fun provideIDProvider(@Named("appContext") context: Context): IDProvider = IDProvider(context)
+    fun provideUserProvider(@Named("appContext") context: Context): UserProvider = UserProvider(context)
     
 }

@@ -7,10 +7,11 @@ import android.preference.PreferenceManager
  *
  * @author Jin on 2019-06-21
  */
-class IDProvider(private val context: Context) {
+class UserProvider(private val context: Context) {
 
     companion object {
         private const val KEY_ID = "id"
+        private const val KEY_USER_IDX = "user_idx"
     }
 
     fun updateID(id: String) {
@@ -22,4 +23,14 @@ class IDProvider(private val context: Context) {
     val id: String?
         get() = PreferenceManager.getDefaultSharedPreferences(context)
             .getString(KEY_ID, null)
+
+    fun updateUserIdx(idx: String) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit()
+            .putString(KEY_USER_IDX, idx)
+            .apply()
+    }
+
+    val userIdx: String
+        get() = PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(KEY_USER_IDX, null)
 }

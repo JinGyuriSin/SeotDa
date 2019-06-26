@@ -22,12 +22,12 @@ interface UserApi {
     @FormUrlEncoded
     @POST("enterToRoom.php")
     fun enterToRoom(
-        @Field("id") id: String
+        @Field("user_idx") userIdx: String
     ): Single<Response<ApiResponse>>
 
     @FormUrlEncoded
     @POST("leaveFromRoom.php")
     fun leaveFromRoom(
-        @Field("id") id: String
+        @Field("user_idx") userIdx: String
     ): Single<Response<ApiResponse>>
 }

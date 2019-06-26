@@ -1,18 +1,18 @@
 package com.appknot.seotda.ui.main
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.appknot.seotda.api.UserApi
+import com.appknot.seotda.model.UserProvider
 
 /**
  *
  * @author Jin on 2019-06-21
  */
-class MainViewModelFactory(val activity: MainActivity, val api: UserApi) : ViewModelProvider.Factory {
+class MainViewModelFactory(val api: UserApi, val userProvider: UserProvider) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return MainViewModel(activity, api) as T
+        return MainViewModel(api, userProvider) as T
     }
 }

@@ -8,8 +8,11 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
+import com.appknot.seotda.extensions.hideLoadingDialog
 import com.appknot.seotda.extensions.plusAssign
-import com.appknot.seotda.model.IDProvider
+import com.appknot.seotda.extensions.showLoadingDialog
+import com.appknot.seotda.extensions.showSnackbar
+import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.BaseActivity
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,7 +26,7 @@ class MainActivity : BaseActivity() {
 
     lateinit var viewModel: MainViewModel
 
-    @Inject lateinit var idProvider: IDProvider
+    @Inject lateinit var userProvider: UserProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +39,22 @@ class MainActivity : BaseActivity() {
         lifecycle += disposables
         lifecycle += viewDisposables
 
+        viewDisposables += viewModel.isLoading
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { isLoading ->
+                if (isLoading) showLoadingDialog()
+                else hideLoadingDialog()
+            }
+
         viewDisposables += viewModel.message
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { message -> showSnackbar(message) }
+
+        viewDisposables += viewModel.data
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                finish()
+            }
 
         viewDisposables += btn_run.clicks()
             .observeOn(AndroidSchedulers.mainThread())
@@ -56,7 +72,7 @@ class MainActivity : BaseActivity() {
         viewDisposables += btn_exit.clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                disposables += viewModel.requestExitRoom(idProvider.id.toString())
+                disposables += viewModel.loadUserIdx()
             }
     }
 
