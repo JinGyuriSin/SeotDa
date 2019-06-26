@@ -1,4 +1,4 @@
-package com.appknot.seotda.ui.user
+package com.appknot.seotda.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -7,13 +7,12 @@ import com.appknot.seotda.model.UserProvider
 
 /**
  *
- * @author Jin on 2019-06-11
+ * @author Jin on 2019-06-21
  */
-
-class UserViewModelFactory(val api: UserApi, val userProvider: UserProvider) : ViewModelProvider.Factory {
+class MainViewModelFactory(val api: UserApi, val userProvider: UserProvider) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return UserViewModel(api, userProvider) as T
+        return MainViewModel(api, userProvider) as T
     }
 }

@@ -1,24 +1,28 @@
 package com.appknot.seotda.ui.user
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
-import com.appknot.seotda.extensions.plusAssign
-import com.appknot.seotda.rx.AutoClearedDisposable
+import com.appknot.seotda.extensions.*
+import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.BaseActivity
 import com.appknot.seotda.ui.main.MainActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.jakewharton.rxbinding3.view.clicks
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_user.*
 import javax.inject.Inject
 
 class UserActivity : BaseActivity() {
 
-    @Inject lateinit var viewModelFactory: UserViewModelFactory
+    @Inject
+    lateinit var viewModelFactory: UserViewModelFactory
 
     lateinit var viewModel: UserViewModel
+
+    @Inject
+    lateinit var userProvider: UserProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +40,8 @@ class UserActivity : BaseActivity() {
             fbToken = it.token
         }
 
+        tiet_id.setText(userProvider.id)
+
         viewDisposables += viewModel.isLoading
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { isLoading ->
@@ -48,14 +54,28 @@ class UserActivity : BaseActivity() {
             .subscribe { message -> showSnackbar(message) }
 
 
-        viewDisposables += btn_enter.clicks().subscribe {
-            val id = tiet_id.text.toString()
+        viewDisposables += btn_enter.clicks()
+            .subscribe({
+                val id = tiet_id.text.toString()
 
-            disposables += viewModel.requestRegisterToken(id, fbToken)
-        }
+                if ("" == id) Single.error<String>(Throwable("아이디를 입력해주세요"))
+
+                userProvider.updateID(id)
+
+                disposables += viewModel.requestRegisterToken(id, fbToken)
+            }) {
+                showSnackbar(it.message.toString())
+            }
 
         viewDisposables += viewModel.data
+            .filter { !it.isEmpty }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { startActivity(Intent(this, MainActivity::class.java)) }
+            .subscribe {
+                startActivity(
+                    intentFor<MainActivity>()
+                        .clearTask()
+                        .newTask()
+                )
+            }
     }
 }

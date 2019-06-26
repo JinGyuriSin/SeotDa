@@ -13,8 +13,7 @@ open class BaseViewModel : ViewModel(){
 
     val data: BehaviorSubject<SupportOptional<Any>> = BehaviorSubject.create()
 
-    val message: PublishSubject<String> = PublishSubject.create()
+    val isLoading: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
 
-    val isLoading: BehaviorSubject<Boolean>
-            = BehaviorSubject.createDefault(false)
+    val message: PublishSubject<String> = PublishSubject.create()
 }
