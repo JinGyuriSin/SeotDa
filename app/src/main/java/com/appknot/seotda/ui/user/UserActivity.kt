@@ -3,15 +3,19 @@ package com.appknot.seotda.ui.user
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
+import com.appknot.seotda.api.model.BaseModel
+import com.appknot.seotda.api.model.User
 import com.appknot.seotda.extensions.*
 import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.BaseActivity
 import com.appknot.seotda.ui.main.MainActivity
+import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER_LIST
 import com.google.firebase.iid.FirebaseInstanceId
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_user.*
+import org.json.JSONObject
 import javax.inject.Inject
 
 class UserActivity : BaseActivity() {
@@ -55,6 +59,7 @@ class UserActivity : BaseActivity() {
 
 
         viewDisposables += btn_enter.clicks()
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 val id = tiet_id.text.toString()
 

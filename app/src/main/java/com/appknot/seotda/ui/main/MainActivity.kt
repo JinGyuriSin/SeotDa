@@ -61,7 +61,7 @@ class MainActivity : BaseActivity() {
             .subscribe {
                 val clCenterRect = locateView(cl_center)
 
-                iv_me_first_card.animPay(
+                iv_first_card.animPay(
                     clCenterRect.left.toFloat(),
                     clCenterRect.right.toFloat(),
                     clCenterRect.bottom.toFloat(),
@@ -106,5 +106,9 @@ class MainActivity : BaseActivity() {
         loc.bottom = loc.top + view.height
 
         return loc
+    }
+
+    companion object {
+        const val KEY_USER_LIST = "user"
     }
 }

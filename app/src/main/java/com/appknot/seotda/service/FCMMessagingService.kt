@@ -36,6 +36,7 @@ class FCMMessagingService : FirebaseMessagingService() {
         val payload = Gson().fromJson(data["payload"], HashMap<String, String>().javaClass)
 
         app.logMessage("fcm test        !!! ")
+//        app.logMessage(payload)
 
     }
 }
