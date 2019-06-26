@@ -73,11 +73,11 @@ fun <T> parse(data: Any, modelType: Class<Array<T>>): ArrayList<T> {
     return ArrayList(resultArr.asList())
 }
 
-fun toMap(data: Any): LinkedTreeMap<*, *> {
+fun toMap(data: Any): LinkedTreeMap<Any, *> {
     return try {
-        data as LinkedTreeMap<*, *>
+        data as LinkedTreeMap<Any, *>
     } catch (e: ClassCastException) {
-        LinkedTreeMap<String, Any>()
+        LinkedTreeMap<Any, Any>()
     }
 }
 

@@ -10,14 +10,8 @@ import androidx.annotation.StringRes
  */
 
 
-fun Context.shortToast(msg: String) =
-    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+fun Context.showToast(msg: String, duration: Int = Toast.LENGTH_SHORT) =
+    Toast.makeText(this, msg, duration).show()
 
-fun Context.shortToast(@StringRes StringResId: Int) =
-    Toast.makeText(this, getString(StringResId), Toast.LENGTH_SHORT).show()
-
-fun Context.longToast(msg: String) =
-    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-
-fun Context.longToast(@StringRes StringResId: Int) =
-    Toast.makeText(this, getString(StringResId), Toast.LENGTH_LONG).show()
+fun Context.showToast(@StringRes StringResId: Int, duration: Int = Toast.LENGTH_SHORT) =
+    Toast.makeText(this, getString(StringResId), duration).show()

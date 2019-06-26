@@ -46,8 +46,8 @@ object IntentExtensions {
     }
 
     @JvmStatic
-    fun <T> createIntent(ctx: Context, clazz: Class<out T>, params: Array<out Pair<String, Any?>>): Intent {
-        val intent = Intent(ctx, clazz)
+    fun <T> createIntent(context: Context, clazz: Class<out T>, params: Array<out Pair<String, Any?>>): Intent {
+        val intent = Intent(context, clazz)
         if (params.isNotEmpty()) fillIntentArguments(intent, params)
         return intent
     }
