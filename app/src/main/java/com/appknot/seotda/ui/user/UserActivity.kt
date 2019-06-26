@@ -1,12 +1,10 @@
 package com.appknot.seotda.ui.user
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
-import com.appknot.seotda.extensions.plusAssign
-import com.appknot.seotda.model.IDProvider
-import com.appknot.seotda.rx.AutoClearedDisposable
+import com.appknot.seotda.extensions.*
+import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.BaseActivity
 import com.appknot.seotda.ui.main.MainActivity
 import com.google.firebase.iid.FirebaseInstanceId
@@ -23,7 +21,8 @@ class UserActivity : BaseActivity() {
 
     lateinit var viewModel: UserViewModel
 
-    @Inject lateinit var idProvider: IDProvider
+    @Inject
+    lateinit var userProvider: UserProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,32 +40,41 @@ class UserActivity : BaseActivity() {
             fbToken = it.token
         }
 
-        tiet_id.setText(idProvider.id)
+        tiet_id.setText(userProvider.id)
+
+        viewDisposables += viewModel.isLoading
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { isLoading ->
+                if (isLoading) showLoadingDialog()
+                else hideLoadingDialog()
+            }
 
         viewDisposables += viewModel.message
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { message -> showSnackbar(message) }
 
 
-        viewDisposables += btn_enter.clicks().subscribe({
-            val id = tiet_id.text.toString()
+        viewDisposables += btn_enter.clicks()
+            .subscribe({
+                val id = tiet_id.text.toString()
 
-            if ("" == id)  Single.error<String>(Throwable("아이디를 입력해주세요"))
+                if ("" == id) Single.error<String>(Throwable("아이디를 입력해주세요"))
 
-            idProvider.updateID(id)
+                userProvider.updateID(id)
 
-            disposables += viewModel.requestRegisterToken(id, fbToken)
-        } ) {
-            showSnackbar(it.message.toString())
-        }
+                disposables += viewModel.requestRegisterToken(id, fbToken)
+            }) {
+                showSnackbar(it.message.toString())
+            }
 
         viewDisposables += viewModel.data
+            .filter { !it.isEmpty }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 startActivity(
-                    Intent(this, MainActivity::class.java)
-//                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-//                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intentFor<MainActivity>()
+                        .clearTask()
+                        .newTask()
                 )
             }
     }
