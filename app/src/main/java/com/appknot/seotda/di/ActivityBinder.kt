@@ -18,5 +18,5 @@ abstract class ActivityBinder {
     abstract fun bindMainActivity(): MainActivity
 
     @ContributesAndroidInjector(modules = [UserModule::class])
-    abstract fun bindUserListactivity(): UserActivity
+    abstract fun bindUserActivity(): UserActivity
 }
