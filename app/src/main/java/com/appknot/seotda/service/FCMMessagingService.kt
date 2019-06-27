@@ -1,6 +1,11 @@
 package com.appknot.seotda.service
 
+import android.content.Intent
 import com.appknot.seotda.App.Companion.app
+import com.appknot.seotda.api.model.User
+import com.appknot.seotda.extensions.parse
+import com.appknot.seotda.extensions.toMap
+import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER_LIST
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -16,7 +21,7 @@ import com.google.gson.Gson
 class FCMMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         remoteMessage.data?.isNotEmpty()?.let {
-            sendNotification(remoteMessage.data)
+            sendBroadcast(remoteMessage.data)
         }
     }
 
@@ -37,6 +42,22 @@ class FCMMessagingService : FirebaseMessagingService() {
 
         app.logMessage("fcm test        !!! ")
 //        app.logMessage(payload)
+
+    }
+
+    private fun sendBroadcast(data: Map<String, String>) {
+        val type = data["type"]
+        val code = data["code"]
+        val payload = Gson().fromJson(data["payload"], HashMap<String, Any>().javaClass)
+        val intent = Intent("com.appknot.seotda.SEND_BROAD_CAST")
+
+        when (code) {
+            "1" -> {
+                val userList = payload["user_list"]!!
+                intent.putExtra(KEY_USER_LIST, parse(userList, Array<User>::class.java))
+                sendBroadcast(intent)
+            }
+        }
 
     }
 }

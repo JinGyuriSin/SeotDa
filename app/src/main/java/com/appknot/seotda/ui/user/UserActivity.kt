@@ -1,5 +1,9 @@
 package com.appknot.seotda.ui.user
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
@@ -16,6 +20,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_user.*
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class UserActivity : BaseActivity() {
@@ -27,6 +32,10 @@ class UserActivity : BaseActivity() {
 
     @Inject
     lateinit var userProvider: UserProvider
+
+    lateinit var userList: ArrayList<User>
+
+    lateinit var receiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +55,12 @@ class UserActivity : BaseActivity() {
 
         tiet_id.setText(userProvider.id)
 
-        viewDisposables += viewModel.isLoading
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { isLoading ->
-                if (isLoading) showLoadingDialog()
-                else hideLoadingDialog()
-            }
+//        viewDisposables += viewModel.isLoading
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe { isLoading ->
+//                if (isLoading) showLoadingDialog()
+//                else hideLoadingDialog()
+//            }
 
         viewDisposables += viewModel.message
             .observeOn(AndroidSchedulers.mainThread())
@@ -61,26 +70,52 @@ class UserActivity : BaseActivity() {
         viewDisposables += btn_enter.clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                showLoadingDialog()
+
                 val id = tiet_id.text.toString()
 
                 if ("" == id) Single.error<String>(Throwable("아이디를 입력해주세요"))
 
                 userProvider.updateID(id)
 
-                disposables += viewModel.requestRegisterToken(id, fbToken)
+//                disposables += viewModel.requestRegisterToken(id, fbToken)
+
             }) {
                 showSnackbar(it.message.toString())
             }
 
-        viewDisposables += viewModel.data
-            .filter { !it.isEmpty }
+        viewDisposables += Single.timer(10L, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .subscribe({
+                hideLoadingDialog()
+            }) {
+                showSnackbar("통신에 실패했습니다.")
+            }
+
+        receiver = object : BroadcastReceiver()   {
+            override fun onReceive(context: Context?, intent: Intent) {
+                hideLoadingDialog()
+
+                userList = intent.getSerializableExtra(KEY_USER_LIST) as ArrayList<User>
+
                 startActivity(
-                    intentFor<MainActivity>()
+                    intentFor<MainActivity>(
+                        KEY_USER_LIST to userList
+                    )
                         .clearTask()
                         .newTask()
                 )
             }
+        }
+
+        IntentFilter().run {
+            addAction("com.appknot.seotda.SEND_BROAD_CAST")
+            registerReceiver(receiver, this)
+        }
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(receiver)
+        super.onDestroy()
     }
 }

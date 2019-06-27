@@ -15,5 +15,6 @@ data class User(
     @SerializedName("win_count")
     var winCount: String,
     @SerializedName("lose_count")
-    var loseCount: String
+    var loseCount: String,
+    var position: String
 ) : BaseModel()

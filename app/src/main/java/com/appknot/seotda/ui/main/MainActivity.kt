@@ -8,6 +8,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
+import com.appknot.seotda.api.model.User
 import com.appknot.seotda.extensions.hideLoadingDialog
 import com.appknot.seotda.extensions.plusAssign
 import com.appknot.seotda.extensions.showLoadingDialog
@@ -27,6 +28,8 @@ class MainActivity : BaseActivity() {
     lateinit var viewModel: MainViewModel
 
     @Inject lateinit var userProvider: UserProvider
+
+    lateinit var userList: ArrayList<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +77,8 @@ class MainActivity : BaseActivity() {
             .subscribe {
                 disposables += viewModel.loadUserIdx()
             }
+
+        initViews()
     }
 
     fun ImageView.animPay(xFrom: Float, xTo: Float, yFrom: Float, yTo: Float) {
@@ -106,6 +111,10 @@ class MainActivity : BaseActivity() {
         loc.bottom = loc.top + view.height
 
         return loc
+    }
+
+    fun initViews() {
+        userList = intent.getSerializableExtra(KEY_USER_LIST) as ArrayList<User>
     }
 
     companion object {
