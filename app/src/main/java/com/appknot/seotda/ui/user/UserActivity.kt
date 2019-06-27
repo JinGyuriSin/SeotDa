@@ -16,6 +16,7 @@ import com.appknot.seotda.ui.main.MainActivity
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER_LIST
 import com.google.firebase.iid.FirebaseInstanceId
 import com.jakewharton.rxbinding3.view.clicks
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_user.*
@@ -78,13 +79,13 @@ class UserActivity : BaseActivity() {
 
                 userProvider.updateID(id)
 
-//                disposables += viewModel.requestRegisterToken(id, fbToken)
+                disposables += viewModel.requestRegisterToken(id, fbToken)
 
             }) {
                 showSnackbar(it.message.toString())
             }
 
-        viewDisposables += Single.timer(10L, TimeUnit.SECONDS)
+        viewDisposables += Observable.timer(10L, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 hideLoadingDialog()
