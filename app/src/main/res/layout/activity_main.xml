@@ -63,7 +63,7 @@
         app:layout_constraintWidth_percent="0.7">
 
         <ImageView
-            android:id="@+id/iv_profile"
+            android:id="@+id/iv_me_profile"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/profile_bg"
@@ -95,7 +95,7 @@
         <!--app:layout_constraintBottom_toBottomOf="parent"/>-->
 
         <TextView
-            android:id="@+id/tv_money"
+            android:id="@+id/tv_me_money"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:autoSizeTextType="uniform"
@@ -103,8 +103,8 @@
             android:text="1,000,000원"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintLeft_toLeftOf="@id/iv_profile"
-            app:layout_constraintRight_toRightOf="@id/iv_profile"
+            app:layout_constraintLeft_toLeftOf="@id/iv_me_profile"
+            app:layout_constraintRight_toRightOf="@id/iv_me_profile"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.8"
             app:layout_constraintWidth_percent="0.14" />
@@ -119,39 +119,39 @@
             app:layout_constraintWidth_percent="0.4">
 
             <ImageView
-                android:id="@+id/iv_first_card"
+                android:id="@+id/iv_me_first_card"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/holo_red_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHeight_percent="0.75"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/iv_second_card"
+                app:layout_constraintRight_toLeftOf="@id/iv_me_second_card"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.35"
                 app:layout_constraintWidth_percent="0.25" />
 
             <ImageView
-                android:id="@+id/iv_second_card"
+                android:id="@+id/iv_me_second_card"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/holo_red_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHeight_percent="0.75"
-                app:layout_constraintLeft_toRightOf="@id/iv_first_card"
-                app:layout_constraintRight_toLeftOf="@id/iv_third_card"
+                app:layout_constraintLeft_toRightOf="@id/iv_me_first_card"
+                app:layout_constraintRight_toLeftOf="@id/iv_me_third_card"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.35"
                 app:layout_constraintWidth_percent="0.25" />
 
             <ImageView
-                android:id="@+id/iv_third_card"
+                android:id="@+id/iv_me_third_card"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@android:color/holo_red_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHeight_percent="0.75"
-                app:layout_constraintLeft_toRightOf="@id/iv_second_card"
+                app:layout_constraintLeft_toRightOf="@id/iv_me_second_card"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.35"

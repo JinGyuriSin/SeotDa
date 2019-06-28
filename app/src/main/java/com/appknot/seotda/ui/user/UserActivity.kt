@@ -68,6 +68,9 @@ class UserActivity : BaseActivity() {
             .subscribe { message -> showSnackbar(message) }
 
 
+        val timer = Observable.timer(10L, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+
         viewDisposables += btn_enter.clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -81,19 +84,19 @@ class UserActivity : BaseActivity() {
 
                 disposables += viewModel.requestRegisterToken(id, fbToken)
 
+                viewDisposables += timer
+                    .subscribe({
+                        hideLoadingDialog()
+                        error(getString(R.string.common_api_request_failed))
+                    })  {
+                        showSnackbar(R.string.common_api_request_failed)
+                    }
             }) {
                 showSnackbar(it.message.toString())
             }
 
-        viewDisposables += Observable.timer(10L, TimeUnit.SECONDS)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                hideLoadingDialog()
-            }) {
-                showSnackbar("통신에 실패했습니다.")
-            }
 
-        receiver = object : BroadcastReceiver()   {
+        receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
                 hideLoadingDialog()
 

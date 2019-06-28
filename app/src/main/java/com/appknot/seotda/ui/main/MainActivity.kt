@@ -15,6 +15,7 @@ import com.appknot.seotda.extensions.showLoadingDialog
 import com.appknot.seotda.extensions.showSnackbar
 import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.BaseActivity
+import com.appknot.seotda.ui.GlideApp
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -64,7 +65,7 @@ class MainActivity : BaseActivity() {
             .subscribe {
                 val clCenterRect = locateView(cl_center)
 
-                iv_first_card.animPay(
+                iv_me_first_card.animPay(
                     clCenterRect.left.toFloat(),
                     clCenterRect.right.toFloat(),
                     clCenterRect.bottom.toFloat(),
@@ -75,10 +76,19 @@ class MainActivity : BaseActivity() {
         viewDisposables += btn_exit.clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                disposables += viewModel.loadUserIdx()
+                exitRoom()
             }
 
         initViews()
+    }
+
+    override fun onStop() {
+        exitRoom()
+        super.onStop()
+    }
+
+    fun exitRoom() {
+        disposables += viewModel.loadUserIdx()
     }
 
     fun ImageView.animPay(xFrom: Float, xTo: Float, yFrom: Float, yTo: Float) {
@@ -115,6 +125,37 @@ class MainActivity : BaseActivity() {
 
     fun initViews() {
         userList = intent.getSerializableExtra(KEY_USER_LIST) as ArrayList<User>
+
+        var me: User? = null
+        val sortByMe = ArrayList<User>()
+
+        run loop@{
+            userList.forEach { user ->
+                if (userProvider.userIdx == user.idx) {
+                    me = user
+                    return@loop
+                }
+            }
+        }
+
+        me?.let {
+            userList.forEach { user ->
+                if(user.position.toInt() >= it.position.toInt()) sortByMe.add(user)
+            }
+            userList.forEach { user ->
+                if (user.position.toInt() < it.position.toInt()) sortByMe.add(user)
+                else return@let
+            }
+        }
+
+        me?.let {
+            GlideApp.with(this)
+                .load(it.profileImgPath)
+                .into(iv_me_profile)
+
+            tv_me_money.text = getString(R.string.common_coin, it.coin)
+        }
+
     }
 
     companion object {
