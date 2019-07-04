@@ -13,6 +13,7 @@ import com.appknot.seotda.extensions.*
 import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.BaseActivity
 import com.appknot.seotda.ui.main.MainActivity
+import com.appknot.seotda.ui.main.MainActivity.Companion.ACTION_BROADCAST
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER_LIST
 import com.google.firebase.iid.FirebaseInstanceId
 import com.jakewharton.rxbinding3.view.clicks
@@ -113,7 +114,7 @@ class UserActivity : BaseActivity() {
         }
 
         IntentFilter().run {
-            addAction("com.appknot.seotda.SEND_BROAD_CAST")
+            addAction(ACTION_BROADCAST)
             registerReceiver(receiver, this)
         }
     }

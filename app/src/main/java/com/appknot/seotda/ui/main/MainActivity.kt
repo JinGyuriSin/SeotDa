@@ -1,5 +1,9 @@
 package com.appknot.seotda.ui.main
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
@@ -16,9 +20,11 @@ import com.appknot.seotda.extensions.showSnackbar
 import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.BaseActivity
 import com.appknot.seotda.ui.GlideApp
+import com.appknot.seotda.util.convertCurrency
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.profile_user.view.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -28,13 +34,38 @@ class MainActivity : BaseActivity() {
 
     lateinit var viewModel: MainViewModel
 
-    @Inject lateinit var userProvider: UserProvider
+    @Inject
+    lateinit var userProvider: UserProvider
 
     lateinit var userList: ArrayList<User>
+
+    lateinit var receiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                when (intent.getStringExtra(KEY_CODE)) {
+                    "1" -> {
+                        userList = intent.getSerializableExtra(KEY_USER_LIST) as ArrayList<User>
+                        initViews(userList)
+                    }
+                    "2" -> {
+                        val user = intent.getSerializableExtra(KEY_USER) as User
+                        userList.remove(user)
+                        userList.add(User())
+                        initViews(userList)
+                    }
+                }
+            }
+        }
+
+        IntentFilter().run {
+            addAction(ACTION_BROADCAST)
+            registerReceiver(receiver, this)
+        }
 
         viewModel = ViewModelProviders.of(
             this, viewModelFactory
@@ -60,6 +91,8 @@ class MainActivity : BaseActivity() {
                 finish()
             }
 
+        disposables += viewModel.loadUserIdx()
+
         viewDisposables += btn_run.clicks()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
@@ -79,16 +112,32 @@ class MainActivity : BaseActivity() {
                 exitRoom()
             }
 
-        initViews()
+        viewDisposables += btn_ready.clicks()
+            .map { btn_ready.isChecked }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                val notReadyStatus = "0"
+                val readyStatus = "1"
+
+                disposables += when (it) {
+                    true -> viewModel.requestReady(readyStatus)
+                    false -> viewModel.requestReady(notReadyStatus)
+                }
+            }
+
+        userList = intent.getSerializableExtra(KEY_USER_LIST) as ArrayList<User>
+
+        initViews(userList)
     }
 
     override fun onStop() {
         exitRoom()
+        unregisterReceiver(receiver)
         super.onStop()
     }
 
     fun exitRoom() {
-        disposables += viewModel.loadUserIdx()
+        disposables += viewModel.requestExitRoom()
     }
 
     fun ImageView.animPay(xFrom: Float, xTo: Float, yFrom: Float, yTo: Float) {
@@ -123,8 +172,7 @@ class MainActivity : BaseActivity() {
         return loc
     }
 
-    fun initViews() {
-        userList = intent.getSerializableExtra(KEY_USER_LIST) as ArrayList<User>
+    fun initViews(userList: ArrayList<User>) {
 
         var me: User? = null
         val sortByMe = ArrayList<User>()
@@ -140,7 +188,7 @@ class MainActivity : BaseActivity() {
 
         me?.let {
             userList.forEach { user ->
-                if(user.position.toInt() >= it.position.toInt()) sortByMe.add(user)
+                if (user.position.toInt() >= it.position.toInt()) sortByMe.add(user)
             }
             userList.forEach { user ->
                 if (user.position.toInt() < it.position.toInt()) sortByMe.add(user)
@@ -153,12 +201,37 @@ class MainActivity : BaseActivity() {
                 .load(it.profileImgPath)
                 .into(iv_me_profile)
 
-            tv_me_money.text = getString(R.string.common_coin, it.coin)
+            tv_me_money.text = getString(R.string.common_coin, it.coin.toInt().convertCurrency())
         }
+
+        sortByMe.remove(me)
+
+        initUser(sortByMe)
 
     }
 
+    fun initUser(userList: ArrayList<User>) {
+
+        val userViewList = ArrayList<View>()
+
+        userViewList.add(layout_user_first)
+        userViewList.add(layout_user_second)
+        userViewList.add(layout_user_third)
+
+        userList.forEachIndexed { index, user ->
+            GlideApp.with(this)
+                .load(user.profileImgPath)
+                .into(userViewList[index].iv_profile)
+
+            userViewList[index].tv_id.text = user.id
+            userViewList[index].tv_money.text = getString(R.string.common_coin, user.coin.toInt().convertCurrency())
+        }
+    }
+
     companion object {
-        const val KEY_USER_LIST = "user"
+        const val KEY_USER_LIST = "user_list"
+        const val KEY_USER = "user"
+        const val KEY_CODE = "code"
+        const val ACTION_BROADCAST = "com.appknot.seotda.SEND_BROAD_CAST"
     }
 }
