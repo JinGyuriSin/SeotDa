@@ -53,7 +53,7 @@ class UserActivity : BaseActivity() {
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             fbToken = it.token
         }
-
+        var dddd = ""
         tiet_id.setText(userProvider.id)
 
 //        viewDisposables += viewModel.isLoading
