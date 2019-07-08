@@ -11,7 +11,7 @@
 
     <include
         android:id="@+id/layout_user_first"
-        layout="@layout/profile_user"
+        layout="@layout/module_profile_user"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +26,7 @@
 
     <include
         android:id="@+id/layout_user_second"
-        layout="@layout/profile_user"
+        layout="@layout/module_profile_user"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +40,7 @@
 
     <include
         android:id="@+id/layout_user_third"
-        layout="@layout/profile_user"
+        layout="@layout/module_profile_user"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -66,7 +66,6 @@
             android:id="@+id/iv_me_profile"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/profile_bg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHeight_percent="0.55"
             app:layout_constraintHorizontal_bias="0.18"
@@ -225,5 +224,18 @@
         android:text="나가기"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
+
+    <ToggleButton
+        style="@style/AppButton"
+        android:id="@+id/btn_ready"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:textOff="준비"
+        android:textOn="준비 완료"
+        android:checked="false"
+        android:background="@drawable/bg_ready"
+        app:layout_constraintTop_toTopOf="@id/btn_exit"
+        app:layout_constraintBottom_toBottomOf="@id/btn_exit"
+        app:layout_constraintRight_toLeftOf="@id/btn_exit"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

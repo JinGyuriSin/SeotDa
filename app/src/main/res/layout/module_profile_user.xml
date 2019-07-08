@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/mtrl_card_spacing">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:orientation="vertical"
+        android:id="@+id/cl_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_profile_user"
@@ -172,12 +172,6 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

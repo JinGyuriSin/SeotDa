@@ -2,11 +2,13 @@ package com.appknot.seotda.service
 
 import android.content.Intent
 import com.appknot.seotda.App.Companion.app
+import com.appknot.seotda.api.model.Player
 import com.appknot.seotda.api.model.User
 import com.appknot.seotda.extensions.parse
 import com.appknot.seotda.extensions.toMap
 import com.appknot.seotda.ui.main.MainActivity.Companion.ACTION_BROADCAST
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_CODE
+import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_PLAYER
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER_LIST
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -56,11 +58,10 @@ class FCMMessagingService : FirebaseMessagingService() {
 
         when (code) {
             "1" -> {
-                val userList = payload["user_list"]
+                val userList = payload["user_list"]!!
                 userList?.let {
                     intent.putExtra(KEY_CODE, code)
                     intent.putExtra(KEY_USER_LIST, parse(it, Array<User>::class.java))
-                    sendBroadcast(intent)
                 }
             }
             "2" -> {
@@ -68,10 +69,18 @@ class FCMMessagingService : FirebaseMessagingService() {
                 user?.let {
                     intent.putExtra(KEY_CODE, code)
                     intent.putExtra(KEY_USER, parse(it, User::class.java))
-                    sendBroadcast(intent)
+                }
+            }
+            "3" -> {
+                val player = payload["player"]
+                player?.let {
+                    intent.putExtra(KEY_CODE, code)
+                    intent.putExtra(KEY_PLAYER, parse(it, Player::class.java))
                 }
             }
         }
+
+        sendBroadcast(intent)
 
     }
 }

@@ -17,14 +17,16 @@ import io.reactivex.schedulers.Schedulers
  */
 class MainViewModel(val api: UserApi, val userProvider: UserProvider) : BaseViewModel() {
 
+    lateinit var userIdx: String
+
     fun loadUserIdx(): Disposable =
         Single.fromCallable { optionalOf(userProvider.userIdx) }
             .subscribeOn(Schedulers.io())
             .subscribe(Consumer<SupportOptional<String>>   {
-                requestExitRoom(it.value)
+                userIdx = it.value
             })
 
-    fun requestExitRoom(userIdx: String): Disposable =
+    fun requestExitRoom(): Disposable =
         api.leaveFromRoom(userIdx).api()
             .map { optionalOf(it.data) }
             .doOnSubscribe { isLoading.onNext(true) }
@@ -33,5 +35,13 @@ class MainViewModel(val api: UserApi, val userProvider: UserProvider) : BaseView
                 data.onNext(it)
             }) {
                 message.onNext(it.message.toString())
+            }
+
+    fun requestReady(status: String): Disposable =
+        api.ready(userIdx, status).api()
+            .subscribe({
+
+            })  {
+
             }
 }

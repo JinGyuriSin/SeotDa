@@ -12,6 +12,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
+import com.appknot.seotda.api.model.Player
 import com.appknot.seotda.api.model.User
 import com.appknot.seotda.extensions.hideLoadingDialog
 import com.appknot.seotda.extensions.plusAssign
@@ -24,7 +25,7 @@ import com.appknot.seotda.util.convertCurrency
 import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.profile_user.view.*
+import kotlinx.android.synthetic.main.module_profile_user.view.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -39,7 +40,17 @@ class MainActivity : BaseActivity() {
 
     lateinit var userList: ArrayList<User>
 
+    val userViewList = ArrayList<View>()
+    val sortByMe = ArrayList<User>()
+
     lateinit var receiver: BroadcastReceiver
+
+    lateinit var player: Player
+
+    enum class Ready(val key: String, val value: Boolean)  {
+        NOT_READ("0", false),
+        READY("1", true)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +68,10 @@ class MainActivity : BaseActivity() {
                         userList.remove(user)
                         userList.add(User())
                         initViews(userList)
+                    }
+                    "3" -> {
+                        player = intent.getSerializableExtra(KEY_PLAYER) as Player
+                        setReady(player)
                     }
                 }
             }
@@ -116,12 +131,9 @@ class MainActivity : BaseActivity() {
             .map { btn_ready.isChecked }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                val notReadyStatus = "0"
-                val readyStatus = "1"
-
                 disposables += when (it) {
-                    true -> viewModel.requestReady(readyStatus)
-                    false -> viewModel.requestReady(notReadyStatus)
+                    true -> viewModel.requestReady(Ready.READY.key)
+                    false -> viewModel.requestReady(Ready.NOT_READ.key)
                 }
             }
 
@@ -174,8 +186,9 @@ class MainActivity : BaseActivity() {
 
     fun initViews(userList: ArrayList<User>) {
 
+        sortByMe.clear()
+
         var me: User? = null
-        val sortByMe = ArrayList<User>()
 
         run loop@{
             userList.forEach { user ->
@@ -212,7 +225,7 @@ class MainActivity : BaseActivity() {
 
     fun initUser(userList: ArrayList<User>) {
 
-        val userViewList = ArrayList<View>()
+        userViewList.clear()
 
         userViewList.add(layout_user_first)
         userViewList.add(layout_user_second)
@@ -228,10 +241,20 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    fun setReady(player: Player) {
+        sortByMe.forEachIndexed { index, user ->
+            if (user.idx == player.userIdx) {
+                userViewList[index].cl_user.isSelected = Ready.values()[player.ready.toInt()].value
+                return@forEachIndexed
+            }
+        }
+    }
+
     companion object {
         const val KEY_USER_LIST = "user_list"
         const val KEY_USER = "user"
         const val KEY_CODE = "code"
         const val ACTION_BROADCAST = "com.appknot.seotda.SEND_BROAD_CAST"
+        const val KEY_PLAYER = "player"
     }
 }

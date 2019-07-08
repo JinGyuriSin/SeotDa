@@ -30,4 +30,11 @@ interface UserApi {
     fun leaveFromRoom(
         @Field("user_idx") userIdx: String
     ): Single<Response<ApiResponse>>
+
+    @FormUrlEncoded
+    @POST("ready.php")
+    fun ready(
+        @Field("user_idx") userIdx: String,
+        @Field("ready") ready: String
+    ): Single<Response<ApiResponse>>
 }
