@@ -73,6 +73,9 @@ class MainActivity : BaseActivity() {
                         player = intent.getSerializableExtra(KEY_PLAYER) as Player
                         setReady(player)
                     }
+                    "4" -> {
+
+                    }
                 }
             }
         }
@@ -256,5 +259,8 @@ class MainActivity : BaseActivity() {
         const val KEY_CODE = "code"
         const val ACTION_BROADCAST = "com.appknot.seotda.SEND_BROAD_CAST"
         const val KEY_PLAYER = "player"
+        const val KEY_CARD_INFO = "cardInfo"
+        const val KEY_SEED_COIN = "seedCoin"
+        const val KEY_BOSS = "boss"
     }
 }

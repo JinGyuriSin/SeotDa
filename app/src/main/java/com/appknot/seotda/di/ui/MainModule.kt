@@ -1,6 +1,6 @@
 package com.appknot.seotda.di.ui
 
-import com.appknot.seotda.api.UserApi
+import com.appknot.seotda.api.SeotDaApi
 import com.appknot.seotda.model.UserProvider
 import com.appknot.seotda.ui.main.MainViewModelFactory
 import dagger.Module
@@ -15,6 +15,6 @@ import dagger.Provides
 class MainModule {
 
     @Provides
-    fun provideViewModelFactory(userApi: UserApi, userProvider: UserProvider): MainViewModelFactory =
-            MainViewModelFactory(userApi, userProvider)
+    fun provideViewModelFactory(seotDaApi: SeotDaApi, userProvider: UserProvider): MainViewModelFactory =
+            MainViewModelFactory(seotDaApi, userProvider)
 }

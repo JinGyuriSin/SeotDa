@@ -2,13 +2,17 @@ package com.appknot.seotda.service
 
 import android.content.Intent
 import com.appknot.seotda.App.Companion.app
+import com.appknot.seotda.api.model.CardInfo
 import com.appknot.seotda.api.model.Player
 import com.appknot.seotda.api.model.User
 import com.appknot.seotda.extensions.parse
 import com.appknot.seotda.extensions.toMap
 import com.appknot.seotda.ui.main.MainActivity.Companion.ACTION_BROADCAST
+import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_BOSS
+import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_CARD_INFO
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_CODE
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_PLAYER
+import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_SEED_COIN
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER
 import com.appknot.seotda.ui.main.MainActivity.Companion.KEY_USER_LIST
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -77,6 +81,19 @@ class FCMMessagingService : FirebaseMessagingService() {
                     intent.putExtra(KEY_CODE, code)
                     intent.putExtra(KEY_PLAYER, parse(it, Player::class.java))
                 }
+            }
+            "4" -> {
+                val cardInfo = payload["card_info"]
+                val userList = payload["user_list"]
+                val seedCoin = payload["seed_coin"]
+                val boss = payload["boss"]
+
+                intent.putExtra(KEY_CODE, code)
+                cardInfo?.let { intent.putExtra(KEY_CARD_INFO, parse(it, CardInfo::class.java)) }
+                userList?.let { intent.putExtra(KEY_USER_LIST, parse(it, Array<User>::class.java)) }
+                seedCoin?.let { intent.putExtra(KEY_SEED_COIN, parse(it, String::class.java)) }
+                boss?.let { intent.putExtra(KEY_BOSS, parse(it, String::class.java)) }
+
             }
         }
 

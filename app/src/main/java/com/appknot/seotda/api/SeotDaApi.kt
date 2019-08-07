@@ -10,7 +10,7 @@ import retrofit2.http.POST
  *
  * @author Jin on 2019-06-17
  */
-interface UserApi {
+interface SeotDaApi {
 
     @FormUrlEncoded
     @POST("registerToken.php")

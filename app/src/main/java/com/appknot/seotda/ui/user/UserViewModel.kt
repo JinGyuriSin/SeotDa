@@ -1,6 +1,6 @@
 package com.appknot.seotda.ui.user
 
-import com.appknot.seotda.api.UserApi
+import com.appknot.seotda.api.SeotDaApi
 import com.appknot.seotda.extensions.api
 import com.appknot.seotda.extensions.toMap
 import com.appknot.seotda.model.UserProvider
@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable
  *
  * @author Jin on 2019-06-11
  */
-class UserViewModel(val api: UserApi, val userProvider: UserProvider) : BaseViewModel() {
+class UserViewModel(val api: SeotDaApi, val userProvider: UserProvider) : BaseViewModel() {
 
     fun requestRegisterToken(id: String, fbToken: String): Disposable =
             api.registerToken(id, fbToken).api()
