@@ -1,22 +1,26 @@
 package com.appknot.seotda
 
+import android.app.Application
 import android.util.Log
-import com.appknot.seotda.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import com.appknot.seotda.di.*
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidFileProperties
+import org.koin.core.context.startKoin
 
 /**
  *
  * @author Jin on 2019-06-07
  */
-class App : DaggerApplication() {
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent.builder().application(this).build()
-    }
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        startKoin {
+            androidContext(this@App)
+            androidFileProperties()
+            modules(listOf(appContext, apiModule, userProviderModule, mainModule, userModule))
+        }
 
         app = this
     }

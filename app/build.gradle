@@ -63,12 +63,16 @@ dependencies {
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2'
     implementation 'com.jakewharton.rxbinding3:rxbinding-core:3.0.0-alpha2'
     implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0-alpha2'
-    // Dagger
-    implementation 'com.google.dagger:dagger:2.23.1'
-    implementation 'com.google.dagger:dagger-android:2.23.1'
-    implementation 'com.google.dagger:dagger-android-support:2.23.1'
-    kapt 'com.google.dagger:dagger-android-processor:2.23.1'
-    kapt 'com.google.dagger:dagger-compiler:2.23.1'
+    // Koin
+    implementation 'org.koin:koin-core:2.0.1'
+    // Koin extended & experimental features
+    implementation "org.koin:koin-core-ext:2.0.1"
+    // Koin AndroidX Scope features
+    implementation "org.koin:koin-androidx-scope:2.0.1"
+    // Koin AndroidX ViewModel features
+    implementation "org.koin:koin-androidx-viewmodel:2.0.1"
+    // Koin AndroidX Experimental features
+    implementation "org.koin:koin-androidx-ext:2.0.1"
 }
 
 androidExtensions {

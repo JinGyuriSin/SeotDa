@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
-import com.appknot.seotda.api.model.BaseModel
 import com.appknot.seotda.api.model.User
 import com.appknot.seotda.extensions.*
 import com.appknot.seotda.model.UserProvider
@@ -21,19 +19,15 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_user.*
-import org.json.JSONObject
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class UserActivity : BaseActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: UserViewModelFactory
+    val viewModel: UserViewModel by viewModel(clazz = UserViewModel::class)
 
-    lateinit var viewModel: UserViewModel
-
-    @Inject
-    lateinit var userProvider: UserProvider
+    val userProvider: UserProvider by inject()
 
     lateinit var userList: ArrayList<User>
 
@@ -42,10 +36,6 @@ class UserActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
-
-        viewModel = ViewModelProviders.of(
-            this, viewModelFactory
-        )[UserViewModel::class.java]
 
         lifecycle += disposables
         lifecycle += viewDisposables

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.animation.AnimationSet
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
-import androidx.lifecycle.ViewModelProviders
 import com.appknot.seotda.R
 import com.appknot.seotda.api.model.Player
 import com.appknot.seotda.api.model.User
@@ -26,17 +25,14 @@ import com.jakewharton.rxbinding3.view.clicks
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.module_profile_user.view.*
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: MainViewModelFactory
+    val viewModel: MainViewModel by viewModel(clazz = MainViewModel::class)
 
-    lateinit var viewModel: MainViewModel
-
-    @Inject
-    lateinit var userProvider: UserProvider
+    val userProvider: UserProvider by inject()
 
     lateinit var userList: ArrayList<User>
 
@@ -84,10 +80,6 @@ class MainActivity : BaseActivity() {
             addAction(ACTION_BROADCAST)
             registerReceiver(receiver, this)
         }
-
-        viewModel = ViewModelProviders.of(
-            this, viewModelFactory
-        )[MainViewModel::class.java]
 
         lifecycle += disposables
         lifecycle += viewDisposables
